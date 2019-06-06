@@ -15,12 +15,9 @@
  */
 package saulmm.coordinatorexamples;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,13 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		toolbar.inflateMenu(R.menu.main);
-		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-			@Override public boolean onMenuItemClick(MenuItem item) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_REPO_URL));
-				startActivity(browserIntent);
-				return true;
-			}
-		});
+//		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//			@Override public boolean onMenuItemClick(MenuItem item) {
+//				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_REPO_URL));
+//				startActivity(browserIntent);
+//				return true;
+//			}
+//		});
 
 		findViewById(R.id.main_coordinator_textview).setOnClickListener(this);
 		findViewById(R.id.main_materialup_textview).setOnClickListener(this);
