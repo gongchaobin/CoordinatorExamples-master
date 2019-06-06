@@ -19,7 +19,7 @@ public class RecyclerViewBehavior extends CoordinatorLayout.Behavior<View>{
     private static final String TAG = RecyclerViewBehavior.class.getSimpleName();
 
     public RecyclerViewBehavior() {
-
+        111
     }
 
     public RecyclerViewBehavior(Context context, AttributeSet attrs) {
