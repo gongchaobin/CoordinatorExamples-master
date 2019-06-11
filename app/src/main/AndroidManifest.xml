@@ -35,6 +35,12 @@
 		
 		<activity android:name=".TestActivity"/>
 
+		<activity android:name=".DemoActivity"/>
+		
+		<provider
+			android:authorities="saulmm.coordinatorexamples.db.myprovider"
+			android:name=".db.MyProvider"/>
+
     </application>
 
 </manifest>

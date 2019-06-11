@@ -1,21 +1,25 @@
 package saulmm.coordinatorexamples;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import saulmm.coordinatorexamples.behavvior.SampleHeaderBehavior;
 
 /**
  * Copyright (C)
@@ -28,23 +32,75 @@ public class TestActivity extends AppCompatActivity{
 
     private RecyclerView mRecyclerView;
 
+    private static final String TAG = TestActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_test);
-        setContentView(R.layout.activity_test2);
+        setContentView(R.layout.activity_test3);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Log.i(TAG,"onCreate");
 
-        ListTestAdapter adapter = new ListTestAdapter();
-        mRecyclerView.setAdapter(adapter);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.my_list);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        ListTestAdapter adapter = new ListTestAdapter();
+//        mRecyclerView.setAdapter(adapter);
+//
+//
+//        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mRecyclerView.getLayoutParams();
+//        lp.setBehavior(new SampleHeaderBehavior());
 
 
-        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mRecyclerView.getLayoutParams();
-        lp.setBehavior(new SampleHeaderBehavior());
+        Uri uri = Uri.parse("content://saulmm.coordinatorexamples.db.myprovider/user");
+
+        ContentResolver resolver = getContentResolver();
+
+        resolver.registerContentObserver(uri, true, new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                Log.i(TAG,"onChange");
+                super.onChange(selfChange);
+            }
+
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                Log.i(TAG,"onChange11");
+                super.onChange(selfChange, uri);
+            }
+        });
+
+        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_id",3);
+        contentValues.put("name","Iverson");
+
+        resolver.insert(uri,contentValues);
+
+        Cursor cursor = resolver.query(uri,new String[]{"_id","name"}, null, null, null);
+        while (cursor.moveToNext()) {
+            Log.i(TAG,"id: " + cursor.getInt(0) + " name: " + cursor.getString(1));
+        }
+
+        cursor.close();
+
 
     }
+
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     public static void start(Context context) {
         Intent i = new Intent(context, TestActivity.class);
@@ -95,5 +151,11 @@ public class TestActivity extends AppCompatActivity{
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+    }
 
 }

@@ -15,6 +15,7 @@
  */
 package saulmm.coordinatorexamples;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		findViewById(R.id.main_space_textview).setOnClickListener(this);
 		findViewById(R.id.main_swipebehavior_textview).setOnClickListener(this);
 		findViewById(R.id.main_test_textview).setOnClickListener(this);
+
+
 	}
 
 	@Override
@@ -69,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				SwipeBehaviorExampleActivity.start(this);
 				break;
 			case R.id.main_test_textview:
-				TestActivity.start(this);
+				Intent i = new Intent(this,TestActivity.class);
+				startActivity(i);
 				break;
 		}
 	}
