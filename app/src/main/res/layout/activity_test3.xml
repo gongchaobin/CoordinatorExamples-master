@@ -7,12 +7,16 @@
 	 android:layout_width="match_parent"
 	 android:layout_height="match_parent">
 
-	<Button
-		android:id="@+id/button1"
-		android:text="单击"
-		android:padding="10dp"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"/>
+	<!--<Button-->
+		<!--android:id="@+id/button1"-->
+		<!--android:text="单击"-->
+		<!--android:padding="10dp"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"/>-->
+	
+	<saulmm.coordinatorexamples.surface.MySurfaceView
+		android:layout_width="200dp"
+		android:layout_height="200dp"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
