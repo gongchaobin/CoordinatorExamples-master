@@ -1,11 +1,15 @@
 package saulmm.coordinatorexamples;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -17,9 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import saulmm.coordinatorexamples.mode2.IMilk;
-import saulmm.coordinatorexamples.mode2.RedBeanAddition;
-import saulmm.coordinatorexamples.mode2.SoybeanMilk;
+import saulmm.coordinatorexamples.job.JobSchedulerService;
 
 /**
  * Copyright (C)
@@ -104,12 +106,40 @@ public class TestActivity extends AppCompatActivity{
 //        rmrb.notifySubscriber("热爱祖国，热爱人民");
 
 
-        IMilk milk = new SoybeanMilk();
-        milk = new RedBeanAddition(milk);
+//        IMilk milk = new SoybeanMilk();
+//        milk = new RedBeanAddition(milk);
+//
+//        Log.i(TAG,"milk: " + milk.getDescription() + " cost: " + milk.cost());
 
-        Log.i(TAG,"milk: " + milk.getDescription() + " cost: " + milk.cost());
+        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
+        JobInfo.Builder builder = new JobInfo.Builder(1,new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
+
+        builder.setMinimumLatency(5000)
+                // 设置任务运行最少延迟时间
+                .setOverrideDeadline(60000)
+                // 设置deadline，若到期还没有达到规定的条件则会开始执行
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+                // 设置网络条件
+                .setRequiresCharging(false)
+                // 设置是否充电的条件
+                .setRequiresDeviceIdle(false);
+                // 设置手机是否空闲的条件
+
+        PersistableBundle persistableBundle = new PersistableBundle();
+        persistableBundle.putString(JobSchedulerService.class.getSimpleName(),"1111");
+        builder.setExtras(persistableBundle);
+
+        int resultCode = mJobScheduler.schedule(builder.build());
+        if (JobScheduler.RESULT_FAILURE == resultCode) {
+            Log.i(TAG, "jobScheduler 失败");
+        }
     }
+
+
+    private JobScheduler mJobScheduler;
+
+
 
 
     Handler mHandler = new Handler() {

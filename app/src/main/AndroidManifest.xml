@@ -41,6 +41,9 @@
 			android:authorities="saulmm.coordinatorexamples.db.myprovider"
 			android:name=".db.MyProvider"/>
 
+		<service android:name=".job.JobSchedulerService"
+				 android:permission="android.permission.BIND_JOB_SERVICE"/>
+
     </application>
 
 </manifest>
