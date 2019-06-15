@@ -3,22 +3,12 @@ package saulmm.coordinatorexamples;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import saulmm.coordinatorexamples.rxjava.MovieService;
-import saulmm.coordinatorexamples.rxjava.MovieSubject;
 import saulmm.coordinatorexamples.rxjava.Student;
 
 /**
@@ -31,70 +21,72 @@ import saulmm.coordinatorexamples.rxjava.Student;
 public class RxJavaTestActivity extends AppCompatActivity{
 
     private static final String TAG = RxJavaTestActivity.class.getSimpleName();
-
-    private String[] names = {"1","2","3"};
-
-    private List<Student> mStudents;
-
     private static final String BASE_URL = "https://api.douban.com/v2/movie/";
 
     private static final long TIME = 10 * 1000;
+    private String[] names = {"1","2","3"};
+    private List<Student> mStudents;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        httpClientBuilder.connectTimeout(TIME, TimeUnit.SECONDS);
-        httpClientBuilder.writeTimeout(TIME,TimeUnit.SECONDS);
-        httpClientBuilder.readTimeout(TIME,TimeUnit.SECONDS );
-        httpClientBuilder.retryOnConnectionFailure(true);
-
-//         添加公共参数
-//        BasicParamsInterceptor basicParamsInterceptor = new BasicParamsInterceptor.Builder()
-//                .addHeaderParam("userName","")//添加公共参数
-//                .addHeaderParam("device","")
-//                .build();
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.i(TAG,"message: " + message);
-            }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClientBuilder.addInterceptor(interceptor);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(httpClientBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(BASE_URL)
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new HttpLoggingInterceptor())
                 .build();
 
-        MovieService movieService = retrofit.create(MovieService.class);
 
-        movieService.getTop250(0,20)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<MovieSubject>() {
-
-                    @Override
-                    public void onNext(MovieSubject movieSubject) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+//        httpClientBuilder.connectTimeout(TIME, TimeUnit.SECONDS);
+//        httpClientBuilder.writeTimeout(TIME,TimeUnit.SECONDS);
+//        httpClientBuilder.readTimeout(TIME,TimeUnit.SECONDS );
+//        httpClientBuilder.retryOnConnectionFailure(true);
+//
+////         添加公共参数
+////        BasicParamsInterceptor basicParamsInterceptor = new BasicParamsInterceptor.Builder()
+////                .addHeaderParam("userName","")//添加公共参数
+////                .addHeaderParam("device","")
+////                .build();
+//
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+//            @Override
+//            public void log(String message) {
+//                Log.i(TAG,"message: " + message);
+//            }
+//        });
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        httpClientBuilder.addInterceptor(interceptor);
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .client(httpClientBuilder.build())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .baseUrl(BASE_URL)
+//                .build();
+//
+//        MovieService movieService = retrofit.create(MovieService.class);
+//
+//        movieService.getTop250(0,20)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableObserver<MovieSubject>() {
+//
+//                    @Override
+//                    public void onNext(MovieSubject movieSubject) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
 //        Call<MovieSubject> call = movieService.getTop250(0,20);
 //
