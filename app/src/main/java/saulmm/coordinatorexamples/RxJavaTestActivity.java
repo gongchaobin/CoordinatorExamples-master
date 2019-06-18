@@ -3,17 +3,10 @@ package saulmm.coordinatorexamples;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
 import saulmm.coordinatorexamples.rxjava.Student;
 
 /**
@@ -37,55 +30,60 @@ public class RxJavaTestActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
 
-        Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                emitter.onNext(1);
-                emitter.onNext(2);
-                emitter.onNext(3);
-                emitter.onNext(4);
-                emitter.onComplete();
-            }
-        });
-
-        Observable<String> observable2 = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext("A");
-                emitter.onNext("B");
-                emitter.onNext("C");
-                emitter.onComplete();
-            }
-        });
-
-        Observable.zip(observable1, observable2, new BiFunction<Integer, String, String>() {
-
-            @Override
-            public String apply(Integer integer, String s) throws Exception {
-                return integer + s;
-            }
-        }).subscribe(new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.i(TAG,"onSubscribe");
-            }
-
-            @Override
-            public void onNext(String s) {
-                Log.i(TAG,"onNext: " + s);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
 
 
+
+
+
+
+
+//        Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+//                emitter.onNext(1);
+//                emitter.onNext(2);
+//                emitter.onNext(3);
+//                emitter.onNext(4);
+//                emitter.onComplete();
+//            }
+//        });
+//
+//        Observable<String> observable2 = Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                emitter.onNext("A");
+//                emitter.onNext("B");
+//                emitter.onNext("C");
+//                emitter.onComplete();
+//            }
+//        });
+//
+//        Observable.zip(observable1, observable2, new BiFunction<Integer, String, String>() {
+//
+//            @Override
+//            public String apply(Integer integer, String s) throws Exception {
+//                return integer + s;
+//            }
+//        }).subscribe(new Observer<String>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//                Log.i(TAG,"onSubscribe");
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                Log.i(TAG,"onNext: " + s);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//        });
 
 //        OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new HttpLoggingInterceptor())
@@ -112,6 +110,7 @@ public class RxJavaTestActivity extends AppCompatActivity{
 //        });
 //        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 //        httpClientBuilder.addInterceptor(interceptor);
+//
 //
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .client(httpClientBuilder.build())
