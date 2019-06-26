@@ -3,10 +3,23 @@ package saulmm.coordinatorexamples;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import saulmm.coordinatorexamples.rxjava.Student;
 
 /**
@@ -24,6 +37,8 @@ public class RxJavaTestActivity extends AppCompatActivity{
     private static final long TIME = 10 * 1000;
     private String[] names = {"1","2","3"};
     private List<Student> mStudents;
+
+    private static final String CACHE_NAME = "111";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,36 +103,67 @@ public class RxJavaTestActivity extends AppCompatActivity{
 //        OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new HttpLoggingInterceptor())
 //                .build();
-//
 
-//        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-//        httpClientBuilder.connectTimeout(TIME, TimeUnit.SECONDS);
-//        httpClientBuilder.writeTimeout(TIME,TimeUnit.SECONDS);
-//        httpClientBuilder.readTimeout(TIME,TimeUnit.SECONDS );
-//        httpClientBuilder.retryOnConnectionFailure(true);
+
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        httpClientBuilder.connectTimeout(TIME, TimeUnit.SECONDS);
+        httpClientBuilder.writeTimeout(TIME,TimeUnit.SECONDS);
+        httpClientBuilder.readTimeout(TIME,TimeUnit.SECONDS );
+        httpClientBuilder.retryOnConnectionFailure(true);
 //
 ////         添加公共参数
 ////        BasicParamsInterceptor basicParamsInterceptor = new BasicParamsInterceptor.Builder()
 ////                .addHeaderParam("userName","")//添加公共参数
 ////                .addHeaderParam("device","")
 ////                .build();
-//
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-//            @Override
-//            public void log(String message) {
-//                Log.i(TAG,"message: " + message);
-//            }
-//        });
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//        httpClientBuilder.addInterceptor(interceptor);
-//
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .client(httpClientBuilder.build())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .baseUrl(BASE_URL)
-//                .build();
+
+
+        File cacheFile = new File(this.getExternalCacheDir(),CACHE_NAME);
+        Cache cache = new Cache(cacheFile,1024 * 1024 * 50);
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+
+//                Response response = chain.proceed(request);
+//                //网络可用
+//                if (NetworkUtils.isAvailable(RetrofitApplication.getContext())) {
+//                    int maxAge = 0;
+//                    // 有网络时 在响应头中加入：设置缓存超时时间0个小时
+//                    response.newBuilder()
+//                            .header("Cache-Control", "public, max-age=" + maxAge)
+//                            .build();
+//                } else {
+//                    // 无网络时，在响应头中加入：设置超时为4周
+//                    int maxStale = 60 * 60 * 24 * 28;
+//                    response.newBuilder()
+//                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+//                            .build();
+//                }
+                return null;
+            }
+        };
+
+
+
+
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Log.i(TAG,"message: " + message);
+            }
+        });
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpClientBuilder.addInterceptor(interceptor);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(httpClientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(BASE_URL)
+                .build();
 //
 //        MovieService movieService = retrofit.create(MovieService.class);
 //
