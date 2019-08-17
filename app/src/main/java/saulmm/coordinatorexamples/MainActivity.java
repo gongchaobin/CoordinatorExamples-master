@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				SwipeBehaviorExampleActivity.start(this);
 				break;
 			case R.id.main_test_textview:
-				Intent i = new Intent(this,RxJavaTestActivity.class);
+				Intent i = new Intent(this,TestActivity.class);
 				startActivity(i);
 				break;
 		}

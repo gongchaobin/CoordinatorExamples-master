@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.2"
+  compileSdkVersion 28
 
   defaultConfig {
     applicationId "saulmm.coordinatorexamples"
     minSdkVersion 21
-    targetSdkVersion 25
+    targetSdkVersion 28
     versionCode 1
     versionName "1.0"
   }
@@ -17,9 +16,15 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+
+  compileOptions {
+    sourceCompatibility 1.8
+    targetCompatibility 1.8
+  }
+
 }
 
-def SUPPORT = "25.3.0"
+def SUPPORT = "27.1.1"
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -36,5 +41,6 @@ dependencies {
   compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
   compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
   compile 'io.reactivex.rxjava2:rxjava:2.x.y'
+  compile project(':flutter')
 
 }

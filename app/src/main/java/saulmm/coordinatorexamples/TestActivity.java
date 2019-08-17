@@ -1,27 +1,25 @@
 package saulmm.coordinatorexamples;
 
-import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import saulmm.coordinatorexamples.job.JobSchedulerService;
+import io.flutter.facade.Flutter;
 
 /**
  * Copyright (C)
@@ -43,8 +41,9 @@ public class TestActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_test);
         setContentView(R.layout.activity_test3);
-
         Log.i(TAG,"onCreate");
+
+
 
 //        mRecyclerView = (RecyclerView) findViewById(R.id.my_list);
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,13 +73,19 @@ public class TestActivity extends AppCompatActivity{
 //                super.onChange(selfChange, uri);
 //            }
 //        });
-//
-//        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+////
+        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View flutterView = Flutter.createView(
+                        TestActivity.this,
+                        getLifecycle(),
+                        "route1"
+                );
+                FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                addContentView(flutterView, layout);
+            }
+        });
 //
 //        ContentValues contentValues = new ContentValues();
 //        contentValues.put("_id",3);
@@ -111,29 +116,29 @@ public class TestActivity extends AppCompatActivity{
 //
 //        Log.i(TAG,"milk: " + milk.getDescription() + " cost: " + milk.cost());
 
-        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-
-        JobInfo.Builder builder = new JobInfo.Builder(1,new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
-
-        builder.setMinimumLatency(5000)
-                // 设置任务运行最少延迟时间
-                .setOverrideDeadline(60000)
-                // 设置deadline，若到期还没有达到规定的条件则会开始执行
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
-                // 设置网络条件
-                .setRequiresCharging(false)
-                // 设置是否充电的条件
-                .setRequiresDeviceIdle(false);
-                // 设置手机是否空闲的条件
-
-        PersistableBundle persistableBundle = new PersistableBundle();
-        persistableBundle.putString(JobSchedulerService.class.getSimpleName(),"1111");
-        builder.setExtras(persistableBundle);
-
-        int resultCode = mJobScheduler.schedule(builder.build());
-        if (JobScheduler.RESULT_FAILURE == resultCode) {
-            Log.i(TAG, "jobScheduler 失败");
-        }
+//        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+//
+//        JobInfo.Builder builder = new JobInfo.Builder(1,new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
+//
+//        builder.setMinimumLatency(5000)
+//                // 设置任务运行最少延迟时间
+//                .setOverrideDeadline(60000)
+//                // 设置deadline，若到期还没有达到规定的条件则会开始执行
+//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+//                // 设置网络条件
+//                .setRequiresCharging(false)
+//                // 设置是否充电的条件
+//                .setRequiresDeviceIdle(false);
+//                // 设置手机是否空闲的条件
+//
+//        PersistableBundle persistableBundle = new PersistableBundle();
+//        persistableBundle.putString(JobSchedulerService.class.getSimpleName(),"1111");
+//        builder.setExtras(persistableBundle);
+//
+//        int resultCode = mJobScheduler.schedule(builder.build());
+//        if (JobScheduler.RESULT_FAILURE == resultCode) {
+//            Log.i(TAG, "jobScheduler 失败");
+//        }
     }
 
 
